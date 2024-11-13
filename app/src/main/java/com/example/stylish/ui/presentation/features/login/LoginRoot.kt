@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -41,7 +42,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stylish.R
 import com.example.stylish.ui.presentation.components.StylishTextField
-
+import com.example.stylish.ui.presentation.components.toast.showSingleToast
 
 @Composable
 fun LoginRoot(
@@ -51,6 +52,8 @@ fun LoginRoot(
     val username by viewModel.username.collectAsStateWithLifecycle()
     val password by viewModel.password.collectAsStateWithLifecycle()
     val enabled by viewModel.enabled.collectAsStateWithLifecycle()
+    val isRunning by viewModel.isRunning.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LoginRoot(
         username = username,
@@ -58,10 +61,18 @@ fun LoginRoot(
         onPasswordChanged = viewModel::onPasswordChanged,
         password = password,
         enabled = enabled,
-        isRunning = false,
+        isRunning = isRunning,
         onLogin = {
             // Todo
-            onSuccessfulLogin()
+            viewModel.nextClicked(
+                onSuccess = {
+                    context.showSingleToast(context.getString(R.string.login_was_successful))
+                    onSuccessfulLogin()
+                },
+                onShowErrorMessage = {
+                    context.showSingleToast(context.getString(R.string.something_went_wrong))
+                }
+            )
         }
     )
 }
@@ -136,7 +147,6 @@ fun LoginRoot(
             icon = if (!isRunning) null else {
                 {
                     progressIndicator()
-
                 }
             },
             textColor = MaterialTheme.colorScheme.onPrimary,
@@ -166,7 +176,6 @@ fun Button(
         vertical = 0.dp,
     ),
 ) {
-
     Box(
         modifier = modifier
             .clip(shape)

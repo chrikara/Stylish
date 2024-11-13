@@ -5,4 +5,5 @@ enum class Screen {
     Login,
     Main,
     Details,
+    Edit,
 }

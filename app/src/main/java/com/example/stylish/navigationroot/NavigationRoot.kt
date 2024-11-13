@@ -26,6 +26,7 @@ fun NavigationRoot(
         composable(Screen.Splash.name) {
             SplashRoot(
                 onAnimationFinished = {
+                    navController.popBackStack()
                     navController.navigate(Screen.Login.name)
                 }
             )
@@ -34,7 +35,16 @@ fun NavigationRoot(
         composable(Screen.Login.name) {
             LoginRoot(
                 onSuccessfulLogin = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.Main.name)
+                }
+            )
+        }
 
+        composable(Screen.Main.name) {
+            LoginRoot(
+                onSuccessfulLogin = {
+                    navController.navigate(Screen.Main.name)
                 }
             )
         }
