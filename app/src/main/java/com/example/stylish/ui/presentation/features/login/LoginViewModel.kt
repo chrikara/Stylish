@@ -37,11 +37,11 @@ class LoginViewModel @Inject constructor(
     }
 
     fun nextClicked(
-        onSuccess : (String) -> Unit,
-        onShowErrorMessage : () -> Unit,
+        onSuccess: (String) -> Unit,
+        onShowErrorMessage: () -> Unit,
     ) {
         viewModelScope.launch {
-            _isRunning.value = true
+            _isRunning.update { true }
 
             /*
             Delay is just to simulate a longer call
@@ -53,7 +53,7 @@ class LoginViewModel @Inject constructor(
                 username = username.value.trim(),
                 password = password.value.trim(),
             )
-            _isRunning.value = false
+            _isRunning.update { false }
 
             result.onSuccess {
                 onSuccess(it)

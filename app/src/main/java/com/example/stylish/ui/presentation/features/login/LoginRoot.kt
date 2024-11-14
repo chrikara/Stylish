@@ -32,17 +32,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.stylish.R
 import com.example.stylish.ui.presentation.components.StylishTextField
 import com.example.stylish.ui.presentation.components.toast.showSingleToast
+import com.example.stylish.ui.theme.StylishTheme
 
 @Composable
 fun LoginRoot(
@@ -93,15 +96,8 @@ fun LoginRoot(
             .padding(horizontal = 32.dp)
             .safeDrawingPadding(),
     ) {
-        var toggled by remember {
+        var passwordToggled by remember {
             mutableStateOf(false)
-        }
-
-        val progressIndicator: @Composable () -> Unit = {
-            CircularProgressIndicator(
-                modifier = Modifier.size(25.dp),
-                color = MaterialTheme.colorScheme.onPrimary,
-            )
         }
 
         Spacer(modifier = Modifier.height(31.dp))
@@ -113,8 +109,10 @@ fun LoginRoot(
         Spacer(modifier = Modifier.height(31.dp))
 
         StylishTextField(
+            modifier = Modifier
+                .testTag(stringResource(id = R.string.username_text_field_test_tag))
+                .fillMaxWidth(),
             text = username,
-            modifier = Modifier.fillMaxWidth(),
             placeholder = stringResource(R.string.username_or_email),
             onValueChange = onUsernameChanged,
             leadingIcon = R.drawable.user
@@ -122,31 +120,38 @@ fun LoginRoot(
         Spacer(modifier = Modifier.height(31.dp))
 
         StylishTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .testTag(stringResource(id = R.string.password_text_field_test_tag))
+                .fillMaxWidth(),
             text = password,
-            placeholder = stringResource(R.string.username_or_email),
+            placeholder = stringResource(R.string.password),
             onValueChange = onPasswordChanged,
             leadingIcon = R.drawable.lock,
-            visualTransformation = if (toggled)
+            visualTransformation = if (passwordToggled)
                 PasswordVisualTransformation()
             else
                 VisualTransformation.None,
-            trailingIcon = if (toggled) R.drawable.closed_eye else R.drawable.password,
+            trailingIcon = if (passwordToggled) R.drawable.closed_eye else R.drawable.password,
             trailingIconClicked = {
-                toggled = !toggled
+                passwordToggled = !passwordToggled
             }
         )
 
         Spacer(modifier = Modifier.height(76.dp))
 
         Button(
-            modifier = Modifier.fillMaxWidth(),
-            text = "Login",
+            modifier = Modifier
+                .testTag(stringResource(id = R.string.login_button_test_tag))
+                .fillMaxWidth(),
+            text = stringResource(R.string.login),
             enabled = enabled,
             onClick = onLogin,
             icon = if (!isRunning) null else {
                 {
-                    progressIndicator()
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(25.dp),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
                 }
             },
             textColor = MaterialTheme.colorScheme.onPrimary,
@@ -217,5 +222,26 @@ fun Button(
                 style = textStyle,
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun Preview(){
+    var username by remember {
+        mutableStateOf("")
+    }
+
+    var password by remember {
+        mutableStateOf("")
+    }
+
+    StylishTheme {
+        LoginRoot(
+            username = username,
+            password = password,
+            onUsernameChanged = { username = it },
+            onPasswordChanged = { password = it },
+        )
     }
 }

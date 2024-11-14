@@ -12,8 +12,8 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import kotlin.coroutines.cancellation.CancellationException
 
-abstract class Api {
-    val baseUrl: String = "https://fakestoreapi.com"
+interface Api {
+    val baseUrl: String
 }
 
 private data class HttpClientKey(
@@ -102,7 +102,7 @@ suspend inline fun <reified R> Api.delete(
     queryParams: Map<String, String> = emptyMap(),
     multiQueryParams: Map<String, Iterable<String>> = emptyMap(),
     headers: Map<String, String> = emptyMap(),
-): R =
+): Result<R> = safeCall {
     httpClient.delete(endpoint) {
         setQueryParams(
             queryParams = queryParams,
@@ -110,6 +110,8 @@ suspend inline fun <reified R> Api.delete(
         )
         setHeaders(headers)
     }.body()
+}
+
 
 
 fun HttpRequestBuilder.setQueryParams(

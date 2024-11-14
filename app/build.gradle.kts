@@ -89,6 +89,12 @@ dependencies {
     // json
     implementation(libs.kotlinx.serialization.json)
 
+    // mockk
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotest.assertions.core.jvm)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
 
 }
 

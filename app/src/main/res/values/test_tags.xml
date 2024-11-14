@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="username_text_field_test_tag" translatable="false">UsernameTextField</string>
+    <string name="password_text_field_test_tag" translatable="false">PasswordTextField</string>
+    <string name="login_button_test_tag" translatable="false">LoginButton</string>
+</resources>
+
