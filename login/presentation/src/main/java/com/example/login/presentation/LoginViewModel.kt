@@ -2,6 +2,7 @@ package com.example.login.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.core.domain.Preferences
 import com.example.login.domain.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository,
+    private val preferences: Preferences,
 ) : ViewModel() {
 
     private var _username = MutableStateFlow("")
@@ -37,7 +39,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun nextClicked(
-        onSuccess: (String) -> Unit,
+        onSuccess: () -> Unit,
         onShowErrorMessage: () -> Unit,
     ) {
         viewModelScope.launch {
@@ -47,7 +49,6 @@ class LoginViewModel @Inject constructor(
             Delay is just to simulate a longer call
             for UI purposes (hurrayyy)
              */
-
             delay(1000L)
             val result = loginRepository.login(
                 username = username.value.trim(),
@@ -56,7 +57,8 @@ class LoginViewModel @Inject constructor(
             _isRunning.update { false }
 
             result.onSuccess {
-                onSuccess(it)
+                preferences.setUserInfo(it)
+                onSuccess()
             }.onFailure {
                 onShowErrorMessage()
             }

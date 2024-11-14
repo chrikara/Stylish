@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.login.presentation.LoginRoot
+import com.example.products.presentation.ProductsRoot
 
 @Composable
 fun NavigationRoot(
@@ -19,13 +20,16 @@ fun NavigationRoot(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
         navController = navController,
-        startDestination = Screen.Login.name,
+        startDestination = Screen.Splash.name,
     ) {
         composable(Screen.Splash.name) {
             SplashRoot(
-                onAnimationFinished = {
+                onAnimationFinished = { isLoggedIn ->
                     navController.popBackStack()
-                    navController.navigate(Screen.Login.name)
+                    if (isLoggedIn)
+                        navController.navigate(Screen.Main.name)
+                    else
+                        navController.navigate(Screen.Login.name)
                 }
             )
         }
@@ -40,11 +44,7 @@ fun NavigationRoot(
         }
 
         composable(Screen.Main.name) {
-            LoginRoot(
-                onSuccessfulLogin = {
-                    navController.navigate(Screen.Main.name)
-                }
-            )
+            ProductsRoot()
         }
     }
 }

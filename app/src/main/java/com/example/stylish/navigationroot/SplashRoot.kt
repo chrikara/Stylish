@@ -1,5 +1,6 @@
 package com.example.stylish.navigationroot
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -14,19 +15,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.stylish.R
 
 @Composable
-fun SplashRoot(onAnimationFinished: () -> Unit) {
+fun SplashRoot(
+    viewModel: SplashViewModel = hiltViewModel(),
+    onAnimationFinished: (isLoggedIn: Boolean) -> Unit,
+) {
+    BackHandler {}
+
     val alpha = remember {
         Animatable(0f)
     }
     LaunchedEffect(key1 = Unit) {
         alpha.animateTo(
             1f,
-            tween(3000)
+            tween(DEFAULT_DURATION_ANIMATION)
         )
-        onAnimationFinished()
+        onAnimationFinished(viewModel.isLoggedIn())
     }
 
     Box(
@@ -46,5 +53,4 @@ fun SplashRoot(onAnimationFinished: () -> Unit) {
     }
 }
 
-private const val DEFAULT_DURATION_ANIMATION = 3000
-private val DEFAULT_LOGO_SIZE = 280.dp
+private const val DEFAULT_DURATION_ANIMATION = 2500

@@ -3,9 +3,12 @@ package com.example.login.presentation
 import app.cash.turbine.test
 import com.example.core.commonTest.MainDispatcherRule
 import com.example.core.commonTest.testFirst
+import com.example.core.domain.Preferences
+import com.example.core.domain.model.UserInfo
 import com.example.login.domain.LoginRepository
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -16,6 +19,7 @@ import org.junit.Test
 
 class LoginViewModelTest {
     private lateinit var repository: LoginRepository
+    private lateinit var preferences: Preferences
     private lateinit var viewModel: LoginViewModel
 
     @get:Rule
@@ -24,9 +28,10 @@ class LoginViewModelTest {
     @Before
     fun setup() {
         repository = mockk(relaxed = true) {
-            coEvery { login(any(), any()) } returns Result.success("1")
+            coEvery { login(any(), any()) } returns Result.success(UserInfo())
         }
-        viewModel = LoginViewModel(repository)
+        preferences = mockk(relaxed = true)
+        viewModel = LoginViewModel(repository, preferences)
     }
 
     @Test
@@ -141,14 +146,14 @@ class LoginViewModelTest {
         // given
         val username = "Chris"
         val password = "12345"
-        val onSuccess: (String) -> Unit = mockk(relaxed = true)
-        val token = "token"
+        val onSuccess: () -> Unit = mockk(relaxed = true)
+        val userInfo = mockk<UserInfo>(relaxed = true)
 
         // when
         repository = mockk {
-            coEvery { login(any(), any()) } returns Result.success(token)
+            coEvery { login(any(), any()) } returns Result.success(userInfo)
         }
-        viewModel = LoginViewModel(repository)
+        viewModel = LoginViewModel(repository, preferences)
         viewModel.onUsernameChanged(username)
         viewModel.onPasswordChanged(password)
         viewModel.nextClicked(
@@ -159,8 +164,9 @@ class LoginViewModelTest {
         advanceUntilIdle()
 
         // then
-        verify {
-            onSuccess(token)
+        coVerify {
+            preferences.setUserInfo(userInfo)
+            onSuccess()
         }
     }
 
@@ -175,7 +181,7 @@ class LoginViewModelTest {
         repository = mockk {
             coEvery { login(any(), any()) } returns Result.failure(Exception())
         }
-        viewModel = LoginViewModel(repository)
+        viewModel = LoginViewModel(repository, preferences)
         viewModel.onUsernameChanged(username)
         viewModel.onPasswordChanged(password)
         viewModel.nextClicked(

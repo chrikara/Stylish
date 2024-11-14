@@ -11,4 +11,7 @@ java {
 dependencies {
     // coroutines
     implementation(libs.kotlinx.coroutines.core)
+
+    // projects
+    implementation(projects.core.domain)
 }
