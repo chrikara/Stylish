@@ -1,4 +1,8 @@
 [versions]
+targetSdk = '34'
+compileSdk = '34'
+minSdk = '24'
+
 agp = "8.5.2"
 hiltAndroid = "2.51.1"
 kotlin = "2.0.0"
@@ -19,6 +23,9 @@ ktor = '2.3.5'
 turbine = '0.12.3'
 coroutines = '1.8.1'
 kotest = '5.7.2'
+appcompat = "1.7.0"
+material = "1.12.0"
+jetbrainsKotlinJvm = "2.0.0"
 
 [libraries]
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationComposeVersion" }
@@ -61,6 +68,10 @@ ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "k
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
 
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 
 
 [plugins]
@@ -70,3 +81,5 @@ jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = 
 google-dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }

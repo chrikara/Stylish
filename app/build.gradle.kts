@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.example.stylish"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.example.stylish"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
@@ -64,6 +64,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    // hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.navigation.compose)
@@ -96,6 +98,19 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
 
+    // modules
+    implementation(projects.core.presentation)
+    implementation(projects.core.domain)
+    implementation(projects.core.data)
+    implementation(projects.core.network)
+
+    implementation(projects.login.presentation)
+    implementation(projects.login.domain)
+    implementation(projects.login.data)
+
+    implementation(projects.products.presentation)
+    implementation(projects.products.domain)
+    implementation(projects.products.data)
 }
 
 kapt {
