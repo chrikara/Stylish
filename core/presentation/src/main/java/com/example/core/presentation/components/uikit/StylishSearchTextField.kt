@@ -1,10 +1,12 @@
 package com.example.core.presentation.components.uikit
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,12 +24,13 @@ import com.example.core.presentation.components.modifier.shadow
 @Composable
 fun StylishSearchTextField(
     modifier: Modifier = Modifier,
-    text : String,
-    placeHolderText : String? = null,
+    text: String,
+    placeHolderText: String? = null,
     onValueChange: (String) -> Unit,
-    shapeDp : Dp = 7.dp,
-    blurRadius : Dp = 10.dp,
-    spread : Dp = 1.dp,
+    onClearClicked: () -> Unit,
+    shapeDp: Dp = 7.dp,
+    blurRadius: Dp = 10.dp,
+    spread: Dp = 1.dp,
     color: Color,
     backgroundColor: Color,
 ) {
@@ -49,7 +52,7 @@ fun StylishSearchTextField(
         value = text,
         singleLine = true,
         textStyle = MaterialTheme.typography.bodyLarge,
-        placeholder = placeHolderText?.let{
+        placeholder = placeHolderText?.let {
             {
                 Text(
                     text = placeHolderText,
@@ -65,6 +68,16 @@ fun StylishSearchTextField(
                 contentDescription = "",
                 tint = color,
             )
+        },
+        trailingIcon = {
+            AnimatedVisibility(visible = text.isNotEmpty()) {
+                Icon(
+                    modifier = Modifier.clickable(onClick = onClearClicked),
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "",
+                    tint = color,
+                )
+            }
         },
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedBorderColor = Color.Transparent,

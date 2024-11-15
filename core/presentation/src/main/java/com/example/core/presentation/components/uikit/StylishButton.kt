@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,11 +29,11 @@ fun StylishButton(
     text: String,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    textColor: Color,
-    textStyle: TextStyle,
+    textColor: Color = MaterialTheme.colorScheme.onPrimary,
+    textStyle: TextStyle = MaterialTheme.typography.titleLarge,
     icon: (@Composable () -> Unit)? = null,
     enabled: Boolean = true,
-    color: Color,
+    color: Color = MaterialTheme.colorScheme.primary,
     shape: Shape = CircleShape,
     paddingValues: PaddingValues = PaddingValues(
         horizontal = 0.dp,

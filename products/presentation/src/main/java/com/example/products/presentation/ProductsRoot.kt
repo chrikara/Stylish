@@ -7,10 +7,12 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +20,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -27,6 +31,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -52,23 +57,109 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.core.presentation.components.modifier.applyIf
 import com.example.core.presentation.components.theme.StylishTheme
+import com.example.core.presentation.components.uikit.StylishButton
 import com.example.core.presentation.components.uikit.StylishLogoImage
 import com.example.core.presentation.components.uikit.StylishSearchTextField
-import com.example.products.domain.Category
-import com.example.products.domain.Category.ELECTRONICS
-import com.example.products.domain.Category.JEWELRY
-import com.example.products.domain.Category.MENS_CLOTHING
-import com.example.products.domain.Category.WOMENS_CLOTHING
-import com.example.products.domain.Product
+import com.example.products.domain.model.Category
+import com.example.products.domain.model.Category.ELECTRONICS
+import com.example.products.domain.model.Category.JEWELRY
+import com.example.products.domain.model.Category.MENS_CLOTHING
+import com.example.products.domain.model.Category.WOMENS_CLOTHING
+import com.example.products.domain.model.Product
+
+
+@Composable
+fun ProductsRoot(
+    viewModel: ProductsViewModel = hiltViewModel(),
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val filteredProducts by viewModel.filteredProducts.collectAsStateWithLifecycle()
+    val categorySelected by viewModel.categorySelected.collectAsStateWithLifecycle()
+    val searchText by viewModel.searchText.collectAsStateWithLifecycle()
+    val categories by viewModel.categories.collectAsStateWithLifecycle()
+
+    ProductsRoot(
+        searchText = searchText,
+        onSearchTextChanged = viewModel::onSearchTextChanged,
+        onCategoryClicked = viewModel::onCategoryClicked,
+        onProductClicked = {},
+        products = filteredProducts,
+        categories = categories,
+        categorySelected = categorySelected,
+        state = state,
+        onClearClicked = viewModel::onClearClicked,
+        onRetryButtonClicked = viewModel::getProductsAndCategories,
+    )
+
+
+}
 
 @Composable
 fun ProductsRoot(
     searchText: String = "",
     onSearchTextChanged: (String) -> Unit,
+    categories: List<Category> = listOf(ELECTRONICS),
+    onCategoryClicked: (Category) -> Unit,
+    categorySelected: Category? = null,
+    onProductClicked: (Product) -> Unit,
+    products: List<Product> = listOf(),
+    state: ProductsRootState,
+    onClearClicked: () -> Unit = {},
+    onRetryButtonClicked: () -> Unit,
+) {
+    when (state) {
+        ProductsRootState.SUCCESS ->
+            ProductsContent(
+                searchText = searchText,
+                onSearchTextChanged = onSearchTextChanged,
+                onCategoryClicked = onCategoryClicked,
+                onClearClicked = onClearClicked,
+                onProductClicked = onProductClicked,
+                products = products,
+                categorySelected = categorySelected,
+                categories = categories,
+            )
+
+        ProductsRootState.LOADING ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(50.dp),
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+        ProductsRootState.ERROR ->
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(text = stringResource(R.string.something_went_wrong_you_should_try_again))
+                Spacer(modifier = Modifier.height(30.dp))
+                StylishButton(
+                    text = stringResource(R.string.retry),
+                    onClick = onRetryButtonClicked,
+                )
+            }
+    }
+}
+
+@Composable
+fun ProductsContent(
+    searchText: String = "",
+    onSearchTextChanged: (String) -> Unit,
+    onClearClicked: () -> Unit = {},
     categories: List<Category> = listOf(Category.ELECTRONICS),
     onCategoryClicked: (Category) -> Unit,
     categorySelected: Category? = null,
@@ -99,6 +190,10 @@ fun ProductsRoot(
             placeHolderText = stringResource(R.string.search_any_product),
             color = ProductsPageDefaults.onBackground,
             backgroundColor = ProductsPageDefaults.background,
+            onClearClicked = {
+                focusManager.clearFocus()
+                onClearClicked()
+            },
         )
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -110,19 +205,21 @@ fun ProductsRoot(
 
         Spacer(modifier = Modifier.height(25.dp))
 
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
-            items(categories) {
-                CategoryItem(
-                    category = it,
-                    onCategoryClicked = onCategoryClicked,
-                    isSelected = it == categorySelected
-                )
+        if (categories.isNotEmpty()) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                items(categories) {
+                    CategoryItem(
+                        category = it,
+                        onCategoryClicked = onCategoryClicked,
+                        isSelected = it == categorySelected
+                    )
+                }
             }
-        }
 
-        Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(25.dp))
+        }
 
         /*
         Most of these string resources should probably come from backend, meaning the could be
@@ -199,11 +296,14 @@ fun ProductsRoot(
         ) {
             items(products, key = { it.id }) {
                 ProductItem(
+                    modifier = Modifier.animateItem(),
                     product = it,
                     onClick = onProductClicked,
                 )
             }
         }
+
+        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
     }
 }
 
@@ -319,22 +419,26 @@ private fun ProductItem(
         Column(
 
         ) {
-            Text(
-                modifier = Modifier.padding(bottom = 4.dp),
-                text = product.title,
-                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.W400),
-                color = MaterialTheme.colorScheme.onBackground,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis,
-            )
+            product.title?.let {
+                Text(
+                    modifier = Modifier.padding(bottom = 4.dp),
+                    text = it,
+                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.W400),
+                    color = MaterialTheme.colorScheme.onBackground,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
 
-
-            Text(
-                text = product.price.toString() + "€",
-                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
-                color = MaterialTheme.colorScheme.onBackground
-            )
+            product.price?.let {
+                Text(
+                    text = it.toString() + "€",
+                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
         }
+
     }
 }
 
@@ -383,7 +487,7 @@ private fun Preview() {
 
     StylishTheme {
 
-        ProductsRoot(
+        ProductsContent(
             searchText = searchText,
             onSearchTextChanged = { searchText = it },
             categories = listOf(

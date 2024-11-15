@@ -27,10 +27,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.core.presentation.components.uikit.StylishButton
-import com.example.core.presentation.components.uikit.StylishTextField
 import com.example.core.presentation.components.theme.StylishTheme
 import com.example.core.presentation.components.toast.showSingleToast
+import com.example.core.presentation.components.uikit.StylishButton
+import com.example.core.presentation.components.uikit.StylishTextField
 
 @Composable
 fun LoginRoot(
@@ -138,8 +138,6 @@ internal fun LoginRoot(
                     )
                 }
             },
-            textColor = MaterialTheme.colorScheme.onPrimary,
-            textStyle = MaterialTheme.typography.titleLarge,
             color = if (enabled)
                 MaterialTheme.colorScheme.primary
             else

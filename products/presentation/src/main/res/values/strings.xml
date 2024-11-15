@@ -11,4 +11,6 @@
     <string name="jewelry">Jewelry</string>
     <string name="electronics">Electronics</string>
     <string name="women_s_clothing">Women\'s clothing</string>
+    <string name="retry">Retry</string>
+    <string name="something_went_wrong_you_should_try_again">Something went wrong. You should try again</string>
 </resources>

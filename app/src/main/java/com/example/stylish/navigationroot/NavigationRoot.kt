@@ -44,7 +44,7 @@ fun NavigationRoot(
         }
 
         composable(Screen.Products.name) {
-            ProductsRoot("", {})
+            ProductsRoot()
         }
     }
 }
