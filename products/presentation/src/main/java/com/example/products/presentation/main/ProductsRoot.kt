@@ -1,4 +1,4 @@
-package com.example.products.presentation
+package com.example.products.presentation.main
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -61,9 +61,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.core.presentation.components.ScreenState
 import com.example.core.presentation.components.modifier.applyIf
 import com.example.core.presentation.components.theme.StylishTheme
-import com.example.core.presentation.components.uikit.StylishButton
 import com.example.core.presentation.components.uikit.StylishLogoImage
 import com.example.core.presentation.components.uikit.StylishSearchTextField
 import com.example.products.domain.model.Category
@@ -72,11 +72,15 @@ import com.example.products.domain.model.Category.JEWELRY
 import com.example.products.domain.model.Category.MENS_CLOTHING
 import com.example.products.domain.model.Category.WOMENS_CLOTHING
 import com.example.products.domain.model.Product
+import com.example.products.domain.model.uniqueKey
+import com.example.products.presentation.R
+import com.example.products.presentation.components.ErrorScreen
 
 
 @Composable
 fun ProductsRoot(
     viewModel: ProductsViewModel = hiltViewModel(),
+    onProductClicked: (Product) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val filteredProducts by viewModel.filteredProducts.collectAsStateWithLifecycle()
@@ -88,7 +92,7 @@ fun ProductsRoot(
         searchText = searchText,
         onSearchTextChanged = viewModel::onSearchTextChanged,
         onCategoryClicked = viewModel::onCategoryClicked,
-        onProductClicked = {},
+        onProductClicked = onProductClicked,
         products = filteredProducts,
         categories = categories,
         categorySelected = categorySelected,
@@ -109,12 +113,12 @@ fun ProductsRoot(
     categorySelected: Category? = null,
     onProductClicked: (Product) -> Unit,
     products: List<Product> = listOf(),
-    state: ProductsRootState,
+    state: ScreenState,
     onClearClicked: () -> Unit = {},
     onRetryButtonClicked: () -> Unit,
 ) {
     when (state) {
-        ProductsRootState.SUCCESS ->
+        ScreenState.SUCCESS ->
             ProductsContent(
                 searchText = searchText,
                 onSearchTextChanged = onSearchTextChanged,
@@ -126,7 +130,7 @@ fun ProductsRoot(
                 categories = categories,
             )
 
-        ProductsRootState.LOADING ->
+        ScreenState.LOADING ->
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -139,19 +143,8 @@ fun ProductsRoot(
                 )
             }
 
-        ProductsRootState.ERROR ->
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(text = stringResource(R.string.something_went_wrong_you_should_try_again))
-                Spacer(modifier = Modifier.height(30.dp))
-                StylishButton(
-                    text = stringResource(R.string.retry),
-                    onClick = onRetryButtonClicked,
-                )
-            }
+        ScreenState.ERROR ->
+            ErrorScreen(onRetryButtonClicked = onRetryButtonClicked)
     }
 }
 
@@ -294,7 +287,7 @@ fun ProductsContent(
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            items(products, key = { it.id }) {
+            items(products, key = Product::uniqueKey) {
                 ProductItem(
                     modifier = Modifier.animateItem(),
                     product = it,
@@ -308,7 +301,7 @@ fun ProductsContent(
 }
 
 @Composable
-fun TopBar(modifier: Modifier = Modifier) {
+private fun TopBar(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -491,17 +484,12 @@ private fun Preview() {
             searchText = searchText,
             onSearchTextChanged = { searchText = it },
             categories = listOf(
-                Category.ELECTRONICS,
-                Category.JEWELRY,
-                Category.MENS_CLOTHING,
-                Category.WOMENS_CLOTHING,
+                ELECTRONICS,
+                JEWELRY,
+                MENS_CLOTHING,
+                WOMENS_CLOTHING,
             ),
-            products = list.mapIndexed { index, pr ->
-                if (index == 1)
-                    pr.copy(title = "asdasd")
-                else
-                    pr
-            },
+            products = list,
             categorySelected = categorySelected,
             onProductClicked = {},
             onCategoryClicked = { categorySelected = if (categorySelected == it) null else it },

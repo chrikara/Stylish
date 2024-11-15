@@ -29,7 +29,7 @@ fun StylishSearchTextField(
     onValueChange: (String) -> Unit,
     onClearClicked: () -> Unit,
     shapeDp: Dp = 7.dp,
-    blurRadius: Dp = 10.dp,
+    blurRadius: Dp = 3.dp,
     spread: Dp = 1.dp,
     color: Color,
     backgroundColor: Color,
@@ -46,9 +46,9 @@ fun StylishSearchTextField(
                 offsetX = 1.dp,
                 offsetY = 1.dp,
             )
-            .clip(RoundedCornerShape(7.dp))
+            .clip(RoundedCornerShape(shapeDp))
             .background(backgroundColor),
-        shape = RoundedCornerShape(7.dp),
+        shape = RoundedCornerShape(shapeDp),
         value = text,
         singleLine = true,
         textStyle = MaterialTheme.typography.bodyLarge,

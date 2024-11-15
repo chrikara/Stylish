@@ -8,3 +8,6 @@ data class Product(
     val image: String,
     val description: String? = null,
 )
+
+val Product.uniqueKey: Int
+    get() = id

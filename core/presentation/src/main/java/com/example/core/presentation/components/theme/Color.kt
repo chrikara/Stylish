@@ -11,5 +11,6 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val StylishBackground = Color(0xFFFDFDFD)
+val StylishOnBackground = Color(0xFF000000)
 val StylishPrimary = Color(0xFFF83758)
 val StylishOnPrimary = Color(0xFFFFFFFF)

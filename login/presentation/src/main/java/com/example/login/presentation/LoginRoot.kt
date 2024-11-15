@@ -53,11 +53,11 @@ fun LoginRoot(
         onLogin = {
             viewModel.nextClicked(
                 onSuccess = {
-                    context.showSingleToast(context.getString(R.string.login_was_successful))
+                    context.showSingleToast(R.string.login_was_successful)
                     onSuccessfulLogin()
                 },
                 onShowErrorMessage = {
-                    context.showSingleToast(context.getString(R.string.something_went_wrong))
+                    context.showSingleToast(R.string.something_went_wrong)
                 }
             )
         }

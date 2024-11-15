@@ -44,7 +44,10 @@ fun StylishButton(
         modifier = modifier
             .clip(shape)
             .background(
-                color = color,
+                color = if (enabled)
+                    color
+                else
+                    MaterialTheme.colorScheme.surfaceVariant,
                 shape = shape
             )
             .clickable(

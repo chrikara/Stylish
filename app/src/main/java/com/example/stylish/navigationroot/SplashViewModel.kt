@@ -10,10 +10,8 @@ class SplashViewModel @Inject constructor(
     private val preferences: Preferences,
 ) : ViewModel() {
 
-
     suspend fun isLoggedIn() =
         preferences.getUserInfo().let { userInfo ->
             userInfo != null && userInfo.token.isNotBlank()
         }
-
 }

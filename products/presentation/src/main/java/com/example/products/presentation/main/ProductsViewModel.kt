@@ -1,7 +1,8 @@
-package com.example.products.presentation
+package com.example.products.presentation.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.core.presentation.components.ScreenState
 import com.example.products.domain.ProductsRepository
 import com.example.products.domain.model.Category
 import com.example.products.domain.model.Product
@@ -25,7 +26,7 @@ class ProductsViewModel @Inject constructor(
 
     private var allProducts = emptyList<Product>()
 
-    private var _state = MutableStateFlow(ProductsRootState.LOADING)
+    private var _state = MutableStateFlow(ScreenState.LOADING)
     val state = _state.asStateFlow()
 
     private var _products = MutableStateFlow(emptyList<Product>())
@@ -72,17 +73,17 @@ class ProductsViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     fun getProductsAndCategories() = viewModelScope.launch {
-        _state.update { ProductsRootState.LOADING }
+        _state.update { ScreenState.LOADING }
 
         val productsResult = async { repository.getProducts() }
         val categoriesResult = async { repository.getCategories() }
 
         productsResult.await().onSuccess { products ->
-            _state.update { ProductsRootState.SUCCESS }
+            _state.update { ScreenState.SUCCESS }
             allProducts = products.sortedBy { it.title }
             _products.update { allProducts }
         }.onFailure {
-            _state.update { ProductsRootState.ERROR }
+            _state.update { ScreenState.ERROR }
         }
 
         _categories.value = categoriesResult.await().getOrElse { emptyList() }
@@ -102,8 +103,4 @@ class ProductsViewModel @Inject constructor(
     fun onClearClicked() {
         _searchText.update { "" }
     }
-}
-
-enum class ProductsRootState {
-    SUCCESS, LOADING, ERROR
 }

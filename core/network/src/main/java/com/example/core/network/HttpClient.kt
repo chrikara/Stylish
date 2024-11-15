@@ -22,7 +22,9 @@ fun Api.createHttpClient(
         json(json)
     }
     install(HttpTimeout) {
-        requestTimeoutMillis = 60_000
+        requestTimeoutMillis = 15000
+        connectTimeoutMillis = 15000
+        socketTimeoutMillis = 15000
     }
 
 
