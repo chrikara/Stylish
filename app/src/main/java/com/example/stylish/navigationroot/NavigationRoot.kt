@@ -20,14 +20,14 @@ fun NavigationRoot(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
         navController = navController,
-        startDestination = Screen.Splash.name,
+        startDestination = Screen.Products.name,
     ) {
         composable(Screen.Splash.name) {
             SplashRoot(
                 onAnimationFinished = { isLoggedIn ->
                     navController.popBackStack()
                     if (isLoggedIn)
-                        navController.navigate(Screen.Main.name)
+                        navController.navigate(Screen.Products.name)
                     else
                         navController.navigate(Screen.Login.name)
                 }
@@ -38,13 +38,13 @@ fun NavigationRoot(
             LoginRoot(
                 onSuccessfulLogin = {
                     navController.popBackStack()
-                    navController.navigate(Screen.Main.name)
+                    navController.navigate(Screen.Products.name)
                 }
             )
         }
 
-        composable(Screen.Main.name) {
-            ProductsRoot()
+        composable(Screen.Products.name) {
+            ProductsRoot("", {})
         }
     }
 }

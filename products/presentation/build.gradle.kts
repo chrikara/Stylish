@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.material3)
 
+    implementation(projects.core.presentation)
     implementation(projects.core.domain)
     implementation(projects.products.domain)
 }

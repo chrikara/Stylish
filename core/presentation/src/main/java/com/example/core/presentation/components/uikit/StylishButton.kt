@@ -1,4 +1,4 @@
-package com.example.core.presentation.components
+package com.example.core.presentation.components.uikit
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
