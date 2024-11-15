@@ -2,4 +2,13 @@
 <resources>
     <string name="search_any_product">Search any product…</string>
     <string name="all_featured">All Featured</string>
+    <string name="_50_40_off">50-40% OFF</string>
+    <string name="now_in_smartphone">Now in smartphone</string>
+    <string name="all_colours">All colours</string>
+    <string name="shop_now"><![CDATA[Shop Now ->]]></string>
+    <string name="product">Product</string>
+    <string name="men_s_clothing">Men\'s clothing</string>
+    <string name="jewelry">Jewelry</string>
+    <string name="electronics">Electronics</string>
+    <string name="women_s_clothing">Women\'s clothing</string>
 </resources>

@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,10 +40,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -51,16 +52,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.core.presentation.components.modifier.applyIf
 import com.example.core.presentation.components.theme.StylishTheme
 import com.example.core.presentation.components.uikit.StylishLogoImage
 import com.example.core.presentation.components.uikit.StylishSearchTextField
+import com.example.products.domain.Category
+import com.example.products.domain.Category.ELECTRONICS
+import com.example.products.domain.Category.JEWELRY
+import com.example.products.domain.Category.MENS_CLOTHING
+import com.example.products.domain.Category.WOMENS_CLOTHING
+import com.example.products.domain.Product
 
 @Composable
 fun ProductsRoot(
     searchText: String = "",
     onSearchTextChanged: (String) -> Unit,
-    categories: List<String> = listOf("electronics")
+    categories: List<Category> = listOf(Category.ELECTRONICS),
+    onCategoryClicked: (Category) -> Unit,
+    categorySelected: Category? = null,
+    onProductClicked: (Product) -> Unit,
+    products: List<Product> = listOf()
 ) {
     val focusManager = LocalFocusManager.current
     Column(
@@ -98,15 +111,24 @@ fun ProductsRoot(
         Spacer(modifier = Modifier.height(25.dp))
 
         LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             items(categories) {
-                CategoryItem(category = it)
+                CategoryItem(
+                    category = it,
+                    onCategoryClicked = onCategoryClicked,
+                    isSelected = it == categorySelected
+                )
             }
         }
 
         Spacer(modifier = Modifier.height(25.dp))
 
+        /*
+        Most of these string resources should probably come from backend, meaning the could be
+        hoisted to the top composable for the viewModel to manage them. But since this is a demo and
+        we don't have an actual API for this, we're adding them as string resources.
+         */
         Card(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -116,14 +138,7 @@ fun ProductsRoot(
                 Modifier
                     .fillMaxWidth()
                     .height(IntrinsicSize.Max)
-                    .background(
-                        brush = Brush.horizontalGradient(
-                            listOf(
-                                Color(0xFFF1637C),
-                                ProductsPageDefaults.bannerBackground
-                            )
-                        )
-                    )
+                    .background(brush = ProductsPageDefaults.bannerBackgroundBrush)
                     .padding(
                         start = 14.dp,
                     )
@@ -134,17 +149,21 @@ fun ProductsRoot(
                         .weight(0.6f)
                 ) {
                     Text(
-                        text = "50-40% OFF",
+                        text = stringResource(R.string._50_40_off),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = "Now in smartphone",
+                        text = stringResource(R.string.now_in_smartphone),
                         style = MaterialTheme.typography.bodySmall
                     )
-                    Text(text = "All colours", style = MaterialTheme.typography.bodySmall)
+                    Text(
+                        text = stringResource(R.string.all_colours),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+
                     Spacer(modifier = Modifier.height(12.dp))
 
                     Text(
@@ -152,13 +171,13 @@ fun ProductsRoot(
                             .clip(RoundedCornerShape(6.dp))
                             .border(
                                 border = BorderStroke(
-                                    1.dp,
+                                    width = 1.dp,
                                     color = ProductsPageDefaults.bannerTextColor,
                                 ),
                                 shape = RoundedCornerShape(6.dp)
                             )
                             .padding(8.dp),
-                        text = "Shop Now ->",
+                        text = stringResource(R.string.shop_now),
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold)
                     )
                 }
@@ -173,6 +192,18 @@ fun ProductsRoot(
             }
         }
 
+        Spacer(modifier = Modifier.height(50.dp))
+
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            items(products, key = { it.id }) {
+                ProductItem(
+                    product = it,
+                    onClick = onProductClicked,
+                )
+            }
+        }
     }
 }
 
@@ -210,7 +241,8 @@ private fun CategoryItem(
     modifier: Modifier = Modifier,
     image: Int? = null,
     isSelected: Boolean = true,
-    category: String,
+    onCategoryClicked: (Category) -> Unit,
+    category: Category,
 ) {
     val primary = MaterialTheme.colorScheme.primary
 
@@ -222,8 +254,8 @@ private fun CategoryItem(
     ) {
         Image(
             modifier = Modifier
-
                 .size(56.dp)
+
                 .applyIf(
                     enabled = isSelected,
                     modifier = Modifier.drawBehind {
@@ -234,8 +266,8 @@ private fun CategoryItem(
                         )
                     }
                 )
-
-                .clip(CircleShape),
+                .clip(CircleShape)
+                .clickable { onCategoryClicked(category) },
             painter =
             if (image != null)
                 painterResource(id = image)
@@ -245,10 +277,10 @@ private fun CategoryItem(
             contentScale = ContentScale.Crop,
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(7.dp))
 
         Text(
-            text = category,
+            text = stringResource(id = category.textId()),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodySmall,
             overflow = TextOverflow.Ellipsis,
@@ -257,12 +289,73 @@ private fun CategoryItem(
     }
 }
 
+@Composable
+private fun ProductItem(
+    modifier: Modifier = Modifier,
+    product: Product,
+    onClick: (Product) -> Unit,
+) {
+    Column(
+        modifier =
+        modifier
+            .width(IntrinsicSize.Min)
+            .clickable(onClick = { onClick(product) })
+    ) {
+        AsyncImage(
+            modifier = Modifier
+                .padding(bottom = 4.dp)
+                .width(142.dp)
+                .height(110.dp),
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(data = product.image)
+                .build(),
+            contentDescription = stringResource(R.string.product),
+            error = painterResource(R.drawable.ic_placeholder),
+            placeholder = painterResource(R.drawable.ic_placeholder),
+            contentScale = ContentScale.Crop,
+            alignment = Alignment.Center,
+        )
+
+        Column(
+
+        ) {
+            Text(
+                modifier = Modifier.padding(bottom = 4.dp),
+                text = product.title,
+                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.W400),
+                color = MaterialTheme.colorScheme.onBackground,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
+            )
+
+
+            Text(
+                text = product.price.toString() + "€",
+                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
+    }
+}
 
 private object ProductsPageDefaults {
     val background = Color.White
     val onBackground = Color(0xFFBBBBBB)
     val bannerTextColor = Color(0xFFFFFFFF)
     val bannerBackground = Color(0xFFFFA3B3)
+    val bannerBackgroundBrush = Brush.horizontalGradient(
+        listOf(
+            Color(0xFFF1637C),
+            bannerBackground
+        )
+    )
+}
+
+internal fun Category.textId() = when (this) {
+    MENS_CLOTHING -> R.string.men_s_clothing
+    JEWELRY -> R.string.jewelry
+    ELECTRONICS -> R.string.electronics
+    WOMENS_CLOTHING -> R.string.women_s_clothing
 }
 
 @Preview(showBackground = true)
@@ -272,19 +365,42 @@ private fun Preview() {
         mutableStateOf("")
     }
 
+    val product = Product(
+        id = 1,
+        title = "IWC Schaffhausen\n" +
+                "2021 Pilot's Watch \"SIHH 2019\" 44mm",
+        price = 32.06,
+        category = JEWELRY,
+        image = "",
+        description = ""
+    )
+
+    var categorySelected: Category? by remember {
+        mutableStateOf(null)
+    }
+
+    val list = buildList { repeat(6) { add(product.copy(id = it)) } }
+
     StylishTheme {
 
         ProductsRoot(
             searchText = searchText,
             onSearchTextChanged = { searchText = it },
             categories = listOf(
-                "Electronics",
-                "Woman's clothingss  clothingss st st st",
-                "Electronics",
-                "Electronics",
-                "Jewelry",
-                "Woman's clothingss  clothingss st st st"
-            )
+                Category.ELECTRONICS,
+                Category.JEWELRY,
+                Category.MENS_CLOTHING,
+                Category.WOMENS_CLOTHING,
+            ),
+            products = list.mapIndexed { index, pr ->
+                if (index == 1)
+                    pr.copy(title = "asdasd")
+                else
+                    pr
+            },
+            categorySelected = categorySelected,
+            onProductClicked = {},
+            onCategoryClicked = { categorySelected = if (categorySelected == it) null else it },
         )
     }
 
