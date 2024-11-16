@@ -18,6 +18,12 @@ fun hasTestTag(
     testTag = context.getString(testTagId)
 )
 
+fun hasText(
+    @StringRes testTagId: Int,
+): SemanticsMatcher = androidx.compose.ui.test.hasText(
+    text = context.getString(testTagId)
+)
+
 val DrawableId = SemanticsPropertyKey<Int>("DrawableResId")
 var SemanticsPropertyReceiver.drawableId by DrawableId
 

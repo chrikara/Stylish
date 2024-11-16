@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="stylish_text_field_trailing_icon_test_tag">StylishTextFieldTrailingIcon</string>
+    <string name="clear_icon_test_tag">ClearIcon</string>
 </resources>

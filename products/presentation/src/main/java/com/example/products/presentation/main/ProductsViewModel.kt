@@ -80,7 +80,6 @@ class ProductsViewModel @Inject constructor(
 
         productsResult.await().onSuccess { products ->
             _state.update { ScreenState.SUCCESS }
-            allProducts = products.sortedBy { it.title }
             _products.update { allProducts }
         }.onFailure {
             _state.update { ScreenState.ERROR }

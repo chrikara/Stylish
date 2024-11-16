@@ -5,9 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -17,10 +15,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyRow
@@ -31,7 +29,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,10 +43,10 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -63,6 +60,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.core.presentation.components.ScreenState
 import com.example.core.presentation.components.modifier.applyIf
+import com.example.core.presentation.components.modifier.clickableNoMergeNoRipple
 import com.example.core.presentation.components.theme.StylishTheme
 import com.example.core.presentation.components.uikit.StylishLogoImage
 import com.example.core.presentation.components.uikit.StylishSearchTextField
@@ -75,10 +73,11 @@ import com.example.products.domain.model.Product
 import com.example.products.domain.model.uniqueKey
 import com.example.products.presentation.R
 import com.example.products.presentation.components.ErrorScreen
+import com.example.products.presentation.components.LoadingScreen
 
 
 @Composable
-fun ProductsRoot(
+fun ProductsMainRoot(
     viewModel: ProductsViewModel = hiltViewModel(),
     onProductClicked: (Product) -> Unit,
 ) {
@@ -88,7 +87,7 @@ fun ProductsRoot(
     val searchText by viewModel.searchText.collectAsStateWithLifecycle()
     val categories by viewModel.categories.collectAsStateWithLifecycle()
 
-    ProductsRoot(
+    ProductsMainRoot(
         searchText = searchText,
         onSearchTextChanged = viewModel::onSearchTextChanged,
         onCategoryClicked = viewModel::onCategoryClicked,
@@ -105,7 +104,7 @@ fun ProductsRoot(
 }
 
 @Composable
-fun ProductsRoot(
+internal fun ProductsMainRoot(
     searchText: String = "",
     onSearchTextChanged: (String) -> Unit,
     categories: List<Category> = listOf(ELECTRONICS),
@@ -119,7 +118,7 @@ fun ProductsRoot(
 ) {
     when (state) {
         ScreenState.SUCCESS ->
-            ProductsContent(
+            ProductsMainContent(
                 searchText = searchText,
                 onSearchTextChanged = onSearchTextChanged,
                 onCategoryClicked = onCategoryClicked,
@@ -130,26 +129,14 @@ fun ProductsRoot(
                 categories = categories,
             )
 
-        ScreenState.LOADING ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(50.dp),
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
+        ScreenState.LOADING -> LoadingScreen()
 
-        ScreenState.ERROR ->
-            ErrorScreen(onRetryButtonClicked = onRetryButtonClicked)
+        ScreenState.ERROR -> ErrorScreen(onRetryButtonClicked = onRetryButtonClicked)
     }
 }
 
 @Composable
-fun ProductsContent(
+private fun ProductsMainContent(
     searchText: String = "",
     onSearchTextChanged: (String) -> Unit,
     onClearClicked: () -> Unit = {},
@@ -162,14 +149,15 @@ fun ProductsContent(
     val focusManager = LocalFocusManager.current
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectTapGestures { focusManager.clearFocus() }
+            .clickableNoMergeNoRipple {
+                focusManager.clearFocus()
             }
+            .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 16.dp)
             .statusBarsPadding()
             .background(MaterialTheme.colorScheme.background)
+            .testTag(stringResource(id = R.string.products_main_content)),
     ) {
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -296,7 +284,7 @@ fun ProductsContent(
             }
         }
 
-        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
     }
 }
 
@@ -341,14 +329,14 @@ private fun CategoryItem(
 
     Column(
         modifier = modifier
-            .width(IntrinsicSize.Min),
+            .width(IntrinsicSize.Min)
+            .testTag(stringResource(R.string.category_item_test_tag)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Image(
             modifier = Modifier
                 .size(56.dp)
-
                 .applyIf(
                     enabled = isSelected,
                     modifier = Modifier.drawBehind {
@@ -393,6 +381,7 @@ private fun ProductItem(
         modifier
             .width(IntrinsicSize.Min)
             .clickable(onClick = { onClick(product) })
+            .testTag(stringResource(R.string.product_item_test_tag))
     ) {
         AsyncImage(
             modifier = Modifier
@@ -480,7 +469,7 @@ private fun Preview() {
 
     StylishTheme {
 
-        ProductsContent(
+        ProductsMainContent(
             searchText = searchText,
             onSearchTextChanged = { searchText = it },
             categories = listOf(

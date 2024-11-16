@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import com.example.core.presentation.components.Screen
 import com.example.login.presentation.LoginRoot
 import com.example.products.presentation.details.ProductDetailsRoot
-import com.example.products.presentation.main.ProductsRoot
+import com.example.products.presentation.main.ProductsMainRoot
 
 @Composable
 fun NavigationRoot(
@@ -46,7 +46,7 @@ fun NavigationRoot(
         }
 
         composable(Screen.Products.toString()) {
-            ProductsRoot(
+            ProductsMainRoot(
                 onProductClicked = {
                     navController.navigate(
                         route = Screen.Edit(id = it.id)

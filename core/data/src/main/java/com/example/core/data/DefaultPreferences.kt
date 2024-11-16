@@ -14,7 +14,6 @@ class DefaultPreferences(
     private val sharedPreferences: SharedPreferences,
 ) : Preferences {
 
-
     override suspend fun getUserInfo(): UserInfo? {
         return withContext(Dispatchers.IO) {
             val json = sharedPreferences.getString(KEY_USER_INFO, null)
@@ -38,7 +37,6 @@ class DefaultPreferences(
                 .commit()
         }
     }
-
 
     companion object {
         private const val KEY_USER_INFO = "userInfo"

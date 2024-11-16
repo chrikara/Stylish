@@ -21,11 +21,12 @@ import org.robolectric.annotation.LooperMode.Mode.PAUSED
 abstract class AndroidTest {
     @get:Rule
     val rule = createComposeRule()
-    fun printTree(useUnmergedTree: Boolean = false) {
+
+    protected fun printTree(useUnmergedTree: Boolean = false) =
         println(
             rule.onAllNodes(useUnmergedTree = useUnmergedTree, matcher = isRoot()).onLast()
                 .printToString()
         )
-    }
+
 
 }

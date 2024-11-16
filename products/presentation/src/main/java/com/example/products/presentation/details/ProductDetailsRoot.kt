@@ -3,6 +3,8 @@ package com.example.products.presentation.details
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
@@ -214,7 +216,12 @@ fun DetailsContent(
         bottomBar = {
             AnimatedVisibility(
                 visible = isEditing,
-                enter = slideInVertically { it },
+                enter = slideInVertically(
+                    animationSpec = spring(
+                        dampingRatio = 0.4f,
+                        stiffness = Spring.StiffnessLow
+                    )
+                ) { it },
                 exit = slideOutVertically { it }
             ) {
                 BottomBar(

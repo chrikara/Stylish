@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="products_main_content" translatable="false">ProductsMainContent</string>
+    <string name="products_loading_content" translatable="false">ProductsLoadingContent</string>
+    <string name="products_error_content" translatable="false">ProductsErrorContent</string>
+    <string name="category_item_test_tag">CategoryItem</string>
+    <string name="product_item_test_tag">ProductItem</string>
+</resources>
+

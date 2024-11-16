@@ -14,7 +14,7 @@ android {
 
     testOptions {
         unitTests {
-            this.isIncludeAndroidResources = true
+            isIncludeAndroidResources = true
         }
     }
     defaultConfig {

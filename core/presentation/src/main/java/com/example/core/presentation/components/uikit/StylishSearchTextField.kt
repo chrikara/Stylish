@@ -17,8 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.core.presentation.R
 import com.example.core.presentation.components.modifier.shadow
 
 @Composable
@@ -72,7 +75,9 @@ fun StylishSearchTextField(
         trailingIcon = {
             AnimatedVisibility(visible = text.isNotEmpty()) {
                 Icon(
-                    modifier = Modifier.clickable(onClick = onClearClicked),
+                    modifier = Modifier
+                        .clickable(onClick = onClearClicked)
+                        .testTag(stringResource(R.string.clear_icon_test_tag)),
                     imageVector = Icons.Default.Close,
                     contentDescription = "",
                     tint = color,
