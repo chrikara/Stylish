@@ -12,8 +12,11 @@ hiltNavigationComposeVersion = "1.2.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+robolectric = '4.13'
 lifecycleRuntimeKtx = "2.8.7"
 mockk = '1.13.12'
+test-core = '1.5.0'
+test-junit = '1.1.5'
 activityCompose = "1.9.3"
 serialization = '1.6.0'
 logback-classic = "1.2.3"
@@ -55,9 +58,14 @@ kotest-assertions-core-jvm = { module = "io.kotest:kotest-assertions-core-jvm", 
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockk" }
+ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
-
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+androidx-test-core = { module = "androidx.test:core-ktx", version.ref = "test-core" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit-ktx", version.ref = "test-junit" }
+androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }

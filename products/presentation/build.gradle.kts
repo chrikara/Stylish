@@ -68,3 +68,7 @@ dependencies {
     implementation(projects.core.domain)
     implementation(projects.products.domain)
 }
+
+kapt {
+    correctErrorTypes = true
+}

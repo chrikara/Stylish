@@ -133,7 +133,9 @@ internal fun LoginRoot(
             icon = if (!isRunning) null else {
                 {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(25.dp),
+                        modifier = Modifier
+                            .size(25.dp)
+                            .testTag(stringResource(R.string.login_progress_indicator_test_tag)),
                         color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }

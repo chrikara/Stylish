@@ -56,5 +56,7 @@ dependencies {
     // json
     implementation(libs.kotlinx.serialization.json)
 
+    // projects
     implementation(projects.core.domain)
+    implementation(projects.core.commonTest)
 }

@@ -45,6 +45,17 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.network)
 
+    // network
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.mock)
+
     // json
     implementation(libs.kotlinx.serialization.json)
+
+    // test
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotest.assertions.core.jvm)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.junit)
 }

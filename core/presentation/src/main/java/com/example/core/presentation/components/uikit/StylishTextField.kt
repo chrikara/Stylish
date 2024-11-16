@@ -17,11 +17,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.commonTest.drawableId
+import com.example.core.presentation.R
 import com.example.core.presentation.components.theme.StylishTheme
 
 @Composable
@@ -81,11 +86,15 @@ fun StylishTextField(
         trailingIcon = trailingIcon?.let {
             {
                 IconButton(
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier
+                        .size(20.dp)
+                        .testTag(stringResource(R.string.stylish_text_field_trailing_icon_test_tag)),
                     onClick = trailingIconClicked,
                 ) {
                     Icon(
-                        modifier = Modifier.size(20.dp),
+                        modifier = Modifier
+                            .size(20.dp)
+                            .semantics { drawableId = trailingIcon },
                         painter = painterResource(id = trailingIcon),
                         contentDescription = "",
                         tint = StylishTextFieldDefaults.iconTint

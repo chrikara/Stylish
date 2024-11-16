@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -10,6 +12,11 @@ android {
     namespace = "com.example.login.presentation"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
+    testOptions {
+        unitTests {
+            this.isIncludeAndroidResources = true
+        }
+    }
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
 
@@ -39,6 +46,8 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+
 }
 
 dependencies {
@@ -72,6 +81,9 @@ dependencies {
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+
 
     // projects
     implementation(projects.login.domain)
