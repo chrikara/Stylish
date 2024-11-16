@@ -137,7 +137,7 @@ internal fun ProductDetailsRoot(
 
 
 @Composable
-fun DetailsContent(
+private fun DetailsContent(
     onBackClicked: () -> Unit = {},
     onSaveClicked: () -> Unit = {},
     title: String,

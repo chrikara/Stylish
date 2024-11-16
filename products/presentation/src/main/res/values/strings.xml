@@ -5,7 +5,7 @@
     <string name="_50_40_off">50–40% OFF</string>
     <string name="now_in_smartphone">Now in smartphone</string>
     <string name="all_colours">All colours</string>
-    <string name="shop_now"><![CDATA[Shop Now ->]]></string>
+    <string name="shop_now">Shop Now -></string>
     <string name="product">Product</string>
     <string name="men_s_clothing">Men\'s clothing</string>
     <string name="jewelry">Jewelry</string>
@@ -14,12 +14,12 @@
     <string name="retry">Retry</string>
     <string name="something_went_wrong_you_should_try_again">Something went wrong. You should try again</string>
     <string name="save">Save</string>
-    <string name="see_more">...More</string>
+    <string name="see_more">…More</string>
     <string name="title">Title</string>
     <string name="price">Price</string>
     <string name="category">Category</string>
     <string name="description">Description</string>
-    <string name="could_not_save">Could not save...</string>
+    <string name="could_not_save">Could not save…</string>
     <string name="could_not_get_product">Could not get product</string>
     <string name="save_was_successful">Save was successful!</string>
     <string name="product_details">Product Details</string>

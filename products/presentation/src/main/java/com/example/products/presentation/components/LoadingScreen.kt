@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.example.products.presentation.R
 
 @Composable
-fun LoadingScreen() {
+internal fun LoadingScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()

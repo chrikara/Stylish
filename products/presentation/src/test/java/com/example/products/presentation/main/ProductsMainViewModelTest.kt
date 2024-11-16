@@ -93,7 +93,7 @@ class ProductsMainViewModelTest {
     }
 
     @Test
-    fun `set categories to emptylist when categories request is failure`() = runTest {
+    fun `set categories to empty list when categories request is failure`() = runTest {
         // given
         repository = mockk(relaxed = true) {
             coEvery { getProducts() } returns Result.success(fakeProducts)
@@ -109,7 +109,7 @@ class ProductsMainViewModelTest {
     }
 
     @Test
-    fun `onCategoryClicked - when category clicked, update relevante value`() = runTest {
+    fun `onCategoryClicked - when category clicked, update relevant value`() = runTest {
         // given
         val categoryClicked = fakeCategories[0]
         repository = mockk(relaxed = true) {
@@ -211,7 +211,6 @@ class ProductsMainViewModelTest {
     @Test
     fun `when only updating category, filter products correctly`() = runTest {
         // given
-        val text = "Casual"
         val categoryClicked = fakeCategories[0]
         repository = mockk(relaxed = true) {
             coEvery { getProducts() } returns Result.success(fakeProducts)

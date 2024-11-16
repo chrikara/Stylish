@@ -87,7 +87,7 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.domain)
     implementation(projects.products.domain)
-    implementation(projects.core.commonTest)
+    testImplementation(projects.core.commonTest)
 
 }
 

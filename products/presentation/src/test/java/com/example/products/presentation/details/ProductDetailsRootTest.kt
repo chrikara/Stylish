@@ -97,7 +97,7 @@ class ProductDetailsRootTest : AndroidTest() {
     }
 
     @Test
-    fun `when clicking back after pressing editing, correct action happen back to back`() {
+    fun `when clicking back after pressing editing, correct action happens back to back`() {
         // given
         val onBackClicked: () -> Unit = mockk(relaxed = true)
 
@@ -200,8 +200,6 @@ class ProductDetailsRootTest : AndroidTest() {
         screenState: ScreenState = ScreenState.SUCCESS,
         onRetryButtonClicked: () -> Unit = {},
     ) {
-
-
         ProductDetailsRoot(
             onBackClicked = onBackClicked,
             onSaveClicked = onSaveClicked,

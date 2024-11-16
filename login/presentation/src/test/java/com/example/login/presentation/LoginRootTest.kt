@@ -93,6 +93,29 @@ class LoginRootTest : AndroidTest() {
     }
 
     @Test
+    fun `if button is disabled, assert does not invoke click action`() {
+        // given
+        val enabled = false
+        val onLogin: () -> Unit = mockk(relaxed = true)
+
+        // when
+        rule.setContent {
+            LoginRootUnderTest(
+                enabled = enabled,
+                onLogin = onLogin,
+            )
+        }
+
+        rule.onNode(hasTestTag(R.string.login_button_test_tag))
+            .performClick()
+
+        // then
+        verify(exactly = 0) {
+            onLogin()
+        }
+    }
+
+    @Test
     fun `if is running, assert has  progress indicator`() {
         // given
         val isRunning = true

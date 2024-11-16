@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -76,6 +77,7 @@ fun BannerSection() {
                             ),
                             shape = RoundedCornerShape(6.dp)
                         )
+                        .clickable {  }
                         .padding(8.dp),
                     text = stringResource(R.string.shop_now),
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold)

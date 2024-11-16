@@ -37,9 +37,13 @@ dependencies {
     implementation(libs.kotlinx.coroutines.test)
     implementation(libs.junit)
     implementation(libs.androidx.test.core)
+    implementation(libs.androidx.test.core)
     implementation(libs.androidx.test.ext.junit)
     implementation(libs.robolectric)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui.test.junit4)
     implementation(libs.androidx.compose.ui.test.manifest)
+
+    // projects
+    implementation(projects.core.presentation)
 }

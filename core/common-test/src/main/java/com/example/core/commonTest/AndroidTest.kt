@@ -27,6 +27,4 @@ abstract class AndroidTest {
             rule.onAllNodes(useUnmergedTree = useUnmergedTree, matcher = isRoot()).onLast()
                 .printToString()
         )
-
-
 }

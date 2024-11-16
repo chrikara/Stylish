@@ -58,5 +58,5 @@ dependencies {
 
     // projects
     implementation(projects.core.domain)
-    implementation(projects.core.commonTest)
+    testImplementation(projects.core.commonTest)
 }

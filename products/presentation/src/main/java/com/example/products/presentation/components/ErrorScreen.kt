@@ -16,10 +16,9 @@ import com.example.core.presentation.components.uikit.StylishButton
 import com.example.products.presentation.R
 
 @Composable
-fun ErrorScreen(
+internal fun ErrorScreen(
     onRetryButtonClicked: () -> Unit,
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
