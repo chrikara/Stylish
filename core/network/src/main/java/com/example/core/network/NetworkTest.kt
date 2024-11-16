@@ -11,10 +11,13 @@ import kotlinx.serialization.encodeToString
 abstract class NetworkTest {
     var request: HttpRequestData? = null
 
-    fun getHttpClientEngine(isSuccessful: Boolean = true) = MockEngine { requestData ->
+    inline fun <reified T> getHttpClientEngine(
+        response : T,
+        isSuccessful: Boolean = true
+    ) = MockEngine { requestData ->
         request = requestData
         respond(
-            content = json.encodeToString(Unit),
+            content = json.encodeToString(response),
             status = if (isSuccessful) HttpStatusCode.OK else HttpStatusCode.Unauthorized,
             headers = headersOf(HttpHeaders.ContentType, "application/json"),
         )

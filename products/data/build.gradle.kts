@@ -41,8 +41,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 
     // hilt
     implementation(libs.hilt.android)
@@ -51,6 +49,13 @@ dependencies {
     // json
     implementation(libs.kotlinx.serialization.json)
 
+    // ktor mock
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.mock)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotest.assertions.core.jvm)
+    testImplementation(libs.kotest.assertions.core)
     implementation(projects.core.domain)
     implementation(projects.products.domain)
     implementation(projects.core.data)

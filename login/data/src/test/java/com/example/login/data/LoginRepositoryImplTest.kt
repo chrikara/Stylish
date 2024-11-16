@@ -22,7 +22,7 @@ class LoginRepositoryImplTest : NetworkTest() {
 
         // when
         val repository = LoginRepositoryImpl(
-            httpClientEngine = getHttpClientEngine(),
+            httpClientEngine = getTestHttpClientEngine(),
         )
 
         repository.login(username, password)
@@ -43,7 +43,7 @@ class LoginRepositoryImplTest : NetworkTest() {
         }
         val repository = LoginRepositoryImpl(
             userInfoMapper = userInfoMapper,
-            httpClientEngine = getHttpClientEngine(),
+            httpClientEngine = getTestHttpClientEngine(),
         )
         // when
 
@@ -57,7 +57,7 @@ class LoginRepositoryImplTest : NetworkTest() {
     fun `when request is unsuccessful, correct result is returned`() = runTest {
         // given
         val repository = LoginRepositoryImpl(
-            httpClientEngine = getHttpClientEngine(isSuccessful = false),
+            httpClientEngine = getTestHttpClientEngine(isSuccessful = false),
         )
         // when
         val result = repository.login("username", "username")
@@ -67,5 +67,7 @@ class LoginRepositoryImplTest : NetworkTest() {
         result.getOrNull()?.token shouldBe null
     }
 
+    private fun getTestHttpClientEngine(isSuccessful: Boolean = true) =
+        getHttpClientEngine(response = Unit, isSuccessful = isSuccessful)
 
 }

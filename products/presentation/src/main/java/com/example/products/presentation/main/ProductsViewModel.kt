@@ -76,13 +76,16 @@ class ProductsViewModel @Inject constructor(
         val productsResult = async { repository.getProducts() }
         val categoriesResult = async { repository.getCategories() }
 
-        productsResult.await().onSuccess { products ->
-            _state.update { ScreenState.SUCCESS }
-            allProducts = products
-            _products.update { allProducts }
-        }.onFailure {
-            _state.update { ScreenState.ERROR }
-        }
+        productsResult.await()
+            .onSuccess { products ->
+                _state.update { ScreenState.SUCCESS }
+                with(products) {
+                    allProducts = this
+                    _products.value = this
+                }
+            }.onFailure {
+                _state.update { ScreenState.ERROR }
+            }
 
         _categories.value = categoriesResult.await().getOrElse { emptyList() }
     }

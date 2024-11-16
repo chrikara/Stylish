@@ -27,7 +27,8 @@ fun Api.createHttpClient(
     }
 
     install(Logging) {
-        level = LogLevel.ALL
+        if (BuildConfig.DEBUG)
+            level = LogLevel.ALL
     }
 }
 
