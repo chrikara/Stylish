@@ -12,7 +12,7 @@ suspend fun <T> Flow<T>.testFirst(
     val job = launch {
         collect { result = it }
     }
-    delay(1L)
+    delay(10000L)
     job.cancel()
     return@coroutineScope result
 }

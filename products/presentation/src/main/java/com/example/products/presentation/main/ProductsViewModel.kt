@@ -2,12 +2,12 @@ package com.example.products.presentation.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.core.data.di.DispatchersProvider
 import com.example.core.presentation.components.ScreenState
 import com.example.products.domain.ProductsRepository
 import com.example.products.domain.model.Category
 import com.example.products.domain.model.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductsViewModel @Inject constructor(
     private val repository: ProductsRepository,
+    dispatchers: DispatchersProvider,
 ) : ViewModel() {
 
     private var allProducts = emptyList<Product>()
@@ -43,7 +44,6 @@ class ProductsViewModel @Inject constructor(
 
     init {
         getProductsAndCategories()
-
     }
 
     val filteredProducts = combine(
@@ -53,13 +53,11 @@ class ProductsViewModel @Inject constructor(
             searchText.isBlank() && categorySelected == null -> allProducts
             else -> {
                 allProducts.filter { product ->
-                    // Check if the product matches the search text
                     val matchesSearchText = searchText.isBlank() || product.title?.contains(
                         searchText,
                         ignoreCase = true
                     ) == true
 
-                    // Check if the product matches any selected category
                     val matchesCategory =
                         categorySelected == null || product.category == categorySelected
 
@@ -69,7 +67,7 @@ class ProductsViewModel @Inject constructor(
             }
         }
     }
-        .flowOn(Dispatchers.Default)
+        .flowOn(dispatchers.default)
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     fun getProductsAndCategories() = viewModelScope.launch {
@@ -80,6 +78,7 @@ class ProductsViewModel @Inject constructor(
 
         productsResult.await().onSuccess { products ->
             _state.update { ScreenState.SUCCESS }
+            allProducts = products
             _products.update { allProducts }
         }.onFailure {
             _state.update { ScreenState.ERROR }

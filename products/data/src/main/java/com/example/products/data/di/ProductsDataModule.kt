@@ -17,4 +17,5 @@ object ProductsDataModule {
     @Provides
     fun provideLoginRepository(): ProductsRepository =
         ProductsRepositoryImpl()
+
 }

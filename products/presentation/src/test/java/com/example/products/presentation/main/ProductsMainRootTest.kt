@@ -1,4 +1,4 @@
-package com.example.products.presentation
+package com.example.products.presentation.main
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -31,13 +31,11 @@ import com.example.products.domain.model.Category.JEWELRY
 import com.example.products.domain.model.Category.MENS_CLOTHING
 import com.example.products.domain.model.Category.WOMENS_CLOTHING
 import com.example.products.domain.model.Product
-import com.example.products.presentation.main.ProductsMainRoot
-import com.example.products.presentation.main.textId
+import com.example.products.presentation.R
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Test
 import org.robolectric.annotation.Config
-import com.example.core.presentation.R as uikitR
 
 class ProductsMainRootTest : AndroidTest() {
     @Test
@@ -144,10 +142,13 @@ class ProductsMainRootTest : AndroidTest() {
             ProductsMainRootUnderTest(onClearClicked = onClick)
         }
 
-        rule.onNode(hasTestTag(uikitR.string.clear_icon_test_tag)).assertDoesNotExist()
+        rule.onNode(hasTestTag(com.example.core.presentation.R.string.clear_icon_test_tag))
+            .assertDoesNotExist()
         rule.onNode(hasSetTextAction()).performTextInput(text)
-        rule.onNode(hasTestTag(uikitR.string.clear_icon_test_tag)).assertIsDisplayed()
-        rule.onNode(hasTestTag(uikitR.string.clear_icon_test_tag)).performClick()
+        rule.onNode(hasTestTag(com.example.core.presentation.R.string.clear_icon_test_tag))
+            .assertIsDisplayed()
+        rule.onNode(hasTestTag(com.example.core.presentation.R.string.clear_icon_test_tag))
+            .performClick()
 
         // then
         verify {
@@ -262,14 +263,14 @@ class ProductsMainRootTest : AndroidTest() {
     }
 }
 
-private val fakeCategories = listOf(
+internal val fakeCategories = listOf(
     ELECTRONICS,
     MENS_CLOTHING,
     WOMENS_CLOTHING,
     JEWELRY,
 )
 
-private val fakeProducts = listOf(
+internal val fakeProducts = listOf(
     Product(
         id = 1,
         title = "Men's Casual Shirt",
@@ -289,6 +290,14 @@ private val fakeProducts = listOf(
     Product(
         id = 3,
         title = "Wireless Noise-Cancelling Headphones",
+        price = 199.99,
+        category = ELECTRONICS,
+        image = "",
+        description = "High-quality wireless headphones with active noise cancellation."
+    ),
+    Product(
+        id = 4,
+        title = "Noise headphones",
         price = 199.99,
         category = ELECTRONICS,
         image = "",

@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.example.core.data.DefaultPreferences
+import com.example.core.data.di.DispatchersProvider
+import com.example.core.data.di.StylishDispatchersProvider
 import com.example.core.domain.Preferences
 import dagger.Module
 import dagger.Provides
@@ -22,10 +24,14 @@ object AppModule {
         app: Application
     ): SharedPreferences = app.getSharedPreferences(USER_PREFERENCES, MODE_PRIVATE)
 
+    @Provides
+    @Singleton
+    fun providesDispatchers(): DispatchersProvider = StylishDispatchersProvider()
 
     @Provides
     @Singleton
     fun providesPreferences(
-        sharedPrefs: SharedPreferences
-    ): Preferences = DefaultPreferences(sharedPrefs)
+        sharedPrefs: SharedPreferences,
+        dispatchersProvider: DispatchersProvider,
+    ): Preferences = DefaultPreferences(sharedPrefs, dispatchersProvider)
 }
