@@ -3,7 +3,14 @@
     <string name="products_main_content" translatable="false">ProductsMainContent</string>
     <string name="products_loading_content" translatable="false">ProductsLoadingContent</string>
     <string name="products_error_content" translatable="false">ProductsErrorContent</string>
-    <string name="category_item_test_tag">CategoryItem</string>
-    <string name="product_item_test_tag">ProductItem</string>
+    <string name="category_item_test_tag" translatable="false">CategoryItem</string>
+    <string name="product_item_test_tag" translatable="false">ProductItem</string>
+    <string name="products_details_content_test_tag" translatable="false">ProductsDetailsContent</string>
+    <string name="edit_icon_test_tag" translatable="false">EditIcon</string>
+    <string name="back_icon_test_tag" translatable="false">BackIcon</string>
+    <string name="product_details_title" translatable="false">ProductDetailsTitle</string>
+    <string name="product_details_description" translatable="false">ProductDetailsDescription</string>
+    <string name="product_details_price" translatable="false">ProductDetailsPrice</string>
+    <string name="product_details_category" translatable="false">ProductDetailsCategory</string>
 </resources>
 

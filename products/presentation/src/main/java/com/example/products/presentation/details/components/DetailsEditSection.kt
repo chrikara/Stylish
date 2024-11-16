@@ -1,5 +1,6 @@
 package com.example.products.presentation.details.components
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -33,7 +35,9 @@ fun DetailsEditSection(
     onDescriptionChanged: (String) -> Unit,
 ) {
     Column(
-        modifier = modifier.padding(horizontal = 4.dp)
+        modifier = modifier
+            .padding(horizontal = 4.dp)
+            .testTag(stringResource(R.string.details_edit_section_test_tag))
     ) {
         Spacer(modifier = Modifier.height(22.dp))
 
@@ -41,6 +45,7 @@ fun DetailsEditSection(
             title = stringResource(R.string.title),
             text = title,
             onValueChange = onTitleChanged,
+            testTagId = R.string.product_details_title,
         )
         Spacer(modifier = Modifier.height(18.dp))
         StylishLabeledField(
@@ -50,13 +55,15 @@ fun DetailsEditSection(
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next,
-            )
+            ),
+            testTagId = R.string.product_details_price,
         )
         Spacer(modifier = Modifier.height(18.dp))
         StylishLabeledField(
             title = stringResource(R.string.category),
             text = category,
             onValueChange = onCategoryChanged,
+            testTagId = R.string.product_details_category,
         )
         Spacer(modifier = Modifier.height(18.dp))
         StylishLabeledField(
@@ -64,7 +71,8 @@ fun DetailsEditSection(
             text = description,
             onValueChange = onDescriptionChanged,
             singleLine = false,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Default)
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Default),
+            testTagId = R.string.product_details_description,
         )
 
         Spacer(modifier = Modifier.height(18.dp))
@@ -80,6 +88,7 @@ private fun StylishLabeledField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = true,
     onValueChange: (String) -> Unit,
+    @StringRes testTagId: Int,
 ) {
     Text(
         text = title,
@@ -89,7 +98,9 @@ private fun StylishLabeledField(
     Spacer(modifier = Modifier.height(15.dp))
 
     StylishTextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag(stringResource(id = testTagId)),
         text = text,
         unfocusedBorderColor = Color(0xFFC8C8C8),
         containerColor = Color.White,

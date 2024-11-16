@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -96,7 +97,7 @@ fun ProductDetailsRoot(
 }
 
 @Composable
-private fun ProductDetailsRoot(
+internal fun ProductDetailsRoot(
     onBackClicked: () -> Unit,
     onSaveClicked: () -> Unit,
     title: String,
@@ -131,7 +132,6 @@ private fun ProductDetailsRoot(
         ScreenState.LOADING -> LoadingScreen()
 
         ScreenState.ERROR -> ErrorScreen(onRetryButtonClicked = onRetryButtonClicked)
-
     }
 }
 
@@ -163,7 +163,8 @@ fun DetailsContent(
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .testTag(stringResource(R.string.products_details_content_test_tag)),
         containerColor = MaterialTheme.colorScheme.background,
         content = { paddingValues ->
             Column(
@@ -255,7 +256,8 @@ private fun TopBar(
         Icon(
             modifier = Modifier
                 .clickable(onClick = onBackClick)
-                .size(width = 9.dp, height = 20.dp),
+                .size(width = 9.dp, height = 20.dp)
+                .testTag(stringResource(R.string.back_icon_test_tag)),
             painter = painterResource(id = R.drawable.ic_back),
             contentDescription = "",
             tint = MaterialTheme.colorScheme.onBackground
@@ -265,7 +267,8 @@ private fun TopBar(
             Icon(
                 modifier = Modifier
                     .clickable(onClick = onEditClick)
-                    .size(20.dp),
+                    .size(20.dp)
+                    .testTag(stringResource(R.string.edit_icon_test_tag)),
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = "",
                 tint = MaterialTheme.colorScheme.onBackground

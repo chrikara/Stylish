@@ -1,9 +1,7 @@
 package com.example.products.presentation.main
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +9,6 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,10 +22,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -74,6 +68,7 @@ import com.example.products.domain.model.uniqueKey
 import com.example.products.presentation.R
 import com.example.products.presentation.components.ErrorScreen
 import com.example.products.presentation.components.LoadingScreen
+import com.example.products.presentation.main.components.BannerSection
 
 
 @Composable
@@ -169,8 +164,8 @@ private fun ProductsMainContent(
             text = searchText,
             onValueChange = onSearchTextChanged,
             placeHolderText = stringResource(R.string.search_any_product),
-            color = ProductsPageDefaults.onBackground,
-            backgroundColor = ProductsPageDefaults.background,
+            color = ProductsMainDefaults.onBackground,
+            backgroundColor = ProductsMainDefaults.background,
             onClearClicked = {
                 focusManager.clearFocus()
                 onClearClicked()
@@ -203,72 +198,11 @@ private fun ProductsMainContent(
         }
 
         /*
-        Most of these string resources should probably come from backend, meaning the could be
+        Most of the Banner's resources should probably come from backend, meaning they could be
         hoisted to the top composable for the viewModel to manage them. But since this is a demo and
         we don't have an actual API for this, we're adding them as string resources.
          */
-        Card(
-            modifier = Modifier
-                .fillMaxWidth(),
-            colors = CardDefaults.cardColors(contentColor = ProductsPageDefaults.bannerTextColor)
-        ) {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Max)
-                    .background(brush = ProductsPageDefaults.bannerBackgroundBrush)
-                    .padding(
-                        start = 14.dp,
-                    )
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(vertical = 40.dp)
-                        .weight(0.6f)
-                ) {
-                    Text(
-                        text = stringResource(R.string._50_40_off),
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = stringResource(R.string.now_in_smartphone),
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                    Text(
-                        text = stringResource(R.string.all_colours),
-                        style = MaterialTheme.typography.bodySmall
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Text(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(6.dp))
-                            .border(
-                                border = BorderStroke(
-                                    width = 1.dp,
-                                    color = ProductsPageDefaults.bannerTextColor,
-                                ),
-                                shape = RoundedCornerShape(6.dp)
-                            )
-                            .padding(8.dp),
-                        text = stringResource(R.string.shop_now),
-                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold)
-                    )
-                }
-
-                Image(
-                    modifier = Modifier
-                        .weight(0.4f)
-                        .fillMaxHeight(),
-                    painter = painterResource(id = R.drawable.woman),
-                    contentDescription = "",
-                )
-            }
-        }
+        BannerSection()
 
         Spacer(modifier = Modifier.height(50.dp))
 
@@ -424,11 +358,11 @@ private fun ProductItem(
     }
 }
 
-private object ProductsPageDefaults {
+internal object ProductsMainDefaults {
     val background = Color.White
     val onBackground = Color(0xFFBBBBBB)
     val bannerTextColor = Color(0xFFFFFFFF)
-    val bannerBackground = Color(0xFFFFA3B3)
+    private val bannerBackground = Color(0xFFFFA3B3)
     val bannerBackgroundBrush = Brush.horizontalGradient(
         listOf(
             Color(0xFFF1637C),
@@ -465,10 +399,9 @@ private fun Preview() {
         mutableStateOf(null)
     }
 
-    val list = buildList { repeat(6) { add(product.copy(id = it)) } }
+    val products = buildList { repeat(6) { add(product.copy(id = it)) } }
 
     StylishTheme {
-
         ProductsMainContent(
             searchText = searchText,
             onSearchTextChanged = { searchText = it },
@@ -478,7 +411,7 @@ private fun Preview() {
                 MENS_CLOTHING,
                 WOMENS_CLOTHING,
             ),
-            products = list,
+            products = products,
             categorySelected = categorySelected,
             onProductClicked = {},
             onCategoryClicked = { categorySelected = if (categorySelected == it) null else it },

@@ -23,4 +23,6 @@
     <string name="could_not_get_product">Could not get product</string>
     <string name="save_was_successful">Save was successful!</string>
     <string name="product_details">Product Details</string>
+    <string name="details_edit_section_test_tag">DetailsEditSection</string>
+    <string name="details_body_test_tag">DetailsBody</string>
 </resources>

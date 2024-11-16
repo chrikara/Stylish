@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -30,7 +31,9 @@ internal fun DetailsBody(
     product: Product?,
 ) {
     Column(
-        modifier = Modifier.animateContentSize()
+        modifier = Modifier
+            .animateContentSize()
+            .testTag(stringResource(R.string.details_body_test_tag))
     ) {
 
         var isExpanded by remember {
