@@ -25,8 +25,6 @@ class ProductsViewModel @Inject constructor(
     dispatchers: DispatchersProvider,
 ) : ViewModel() {
 
-    private var allProducts = emptyList<Product>()
-
     private var _state = MutableStateFlow(ScreenState.LOADING)
     val state = _state.asStateFlow()
 
@@ -48,11 +46,11 @@ class ProductsViewModel @Inject constructor(
 
     val filteredProducts = combine(
         searchText, categorySelected, products
-    ) { searchText, categorySelected, _ ->
+    ) { searchText, categorySelected, products ->
         when {
-            searchText.isBlank() && categorySelected == null -> allProducts
+            searchText.isBlank() && categorySelected == null -> products
             else -> {
-                allProducts.filter { product ->
+                products.filter { product ->
                     val matchesSearchText = searchText.isBlank() || product.title?.contains(
                         searchText,
                         ignoreCase = true
@@ -79,11 +77,9 @@ class ProductsViewModel @Inject constructor(
         productsResult.await()
             .onSuccess { products ->
                 _state.update { ScreenState.SUCCESS }
-                with(products) {
-                    allProducts = this
-                    _products.value = this
-                }
-            }.onFailure {
+                _products.update { products }
+            }
+            .onFailure {
                 _state.update { ScreenState.ERROR }
             }
 

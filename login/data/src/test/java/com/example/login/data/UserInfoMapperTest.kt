@@ -1,7 +1,7 @@
 package com.example.login.data
 
 import com.example.core.domain.model.UserInfo
-import com.example.login.data.login.UserInfoMapper
+import com.example.login.data.login.mappers.UserInfoMapper
 import com.example.login.data.login.model.LoginResponse
 import io.kotest.matchers.shouldBe
 import org.junit.Test

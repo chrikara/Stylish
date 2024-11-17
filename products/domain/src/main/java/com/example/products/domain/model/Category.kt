@@ -1,5 +1,10 @@
 package com.example.products.domain.model
 
+import com.example.products.domain.model.Category.ELECTRONICS
+import com.example.products.domain.model.Category.JEWELRY
+import com.example.products.domain.model.Category.MENS_CLOTHING
+import com.example.products.domain.model.Category.WOMENS_CLOTHING
+
 enum class Category {
     MENS_CLOTHING,
     JEWELRY,
@@ -18,3 +23,11 @@ enum class Category {
         }
     }
 }
+
+val fakeCategories = listOf(
+    ELECTRONICS,
+    MENS_CLOTHING,
+    WOMENS_CLOTHING,
+    JEWELRY,
+)
+

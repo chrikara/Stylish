@@ -12,10 +12,11 @@ abstract class NetworkTest {
     var request: HttpRequestData? = null
 
     inline fun <reified T> getHttpClientEngine(
-        response : T,
+        response: T,
         isSuccessful: Boolean = true
     ) = MockEngine { requestData ->
         request = requestData
+
         respond(
             content = json.encodeToString(response),
             status = if (isSuccessful) HttpStatusCode.OK else HttpStatusCode.Unauthorized,

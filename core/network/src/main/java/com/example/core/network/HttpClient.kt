@@ -32,7 +32,7 @@ fun Api.createHttpClient(
     }
 }
 
-private fun Api.HttpClient(
+fun Api.HttpClient(
     clientConfigBlock: HttpClientConfig<*>.() -> Unit,
 ): HttpClient =
     httpClientEngine?.let {

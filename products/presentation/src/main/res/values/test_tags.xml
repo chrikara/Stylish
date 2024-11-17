@@ -12,5 +12,6 @@
     <string name="product_details_description" translatable="false">ProductDetailsDescription</string>
     <string name="product_details_price" translatable="false">ProductDetailsPrice</string>
     <string name="product_details_category" translatable="false">ProductDetailsCategory</string>
+    <string name="save_button_test_tag">SaveButton</string>
 </resources>
 

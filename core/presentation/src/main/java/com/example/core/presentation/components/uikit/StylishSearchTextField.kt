@@ -50,7 +50,8 @@ fun StylishSearchTextField(
                 offsetY = 1.dp,
             )
             .clip(RoundedCornerShape(shapeDp))
-            .background(backgroundColor),
+            .background(backgroundColor)
+            .testTag(stringResource(R.string.stylish_search_text_field_test_tag)),
         shape = RoundedCornerShape(shapeDp),
         value = text,
         singleLine = true,

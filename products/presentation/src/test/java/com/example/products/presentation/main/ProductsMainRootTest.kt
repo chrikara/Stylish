@@ -26,11 +26,9 @@ import com.example.core.commonTest.hasTestTag
 import com.example.core.commonTest.hasText
 import com.example.core.presentation.components.ScreenState
 import com.example.products.domain.model.Category
-import com.example.products.domain.model.Category.ELECTRONICS
-import com.example.products.domain.model.Category.JEWELRY
-import com.example.products.domain.model.Category.MENS_CLOTHING
-import com.example.products.domain.model.Category.WOMENS_CLOTHING
 import com.example.products.domain.model.Product
+import com.example.products.domain.model.fakeCategories
+import com.example.products.domain.model.fakeProducts
 import com.example.products.presentation.R
 import io.mockk.mockk
 import io.mockk.verify
@@ -262,45 +260,3 @@ class ProductsMainRootTest : AndroidTest() {
         )
     }
 }
-
-internal val fakeCategories = listOf(
-    ELECTRONICS,
-    MENS_CLOTHING,
-    WOMENS_CLOTHING,
-    JEWELRY,
-)
-
-internal val fakeProducts = listOf(
-    Product(
-        id = 1,
-        title = "Men's Casual Shirt",
-        price = 29.99,
-        category = MENS_CLOTHING,
-        image = "",
-        description = "A stylish casual shirt for men, perfect for everyday wear."
-    ),
-    Product(
-        id = 2,
-        title = "Elegant Diamond Necklace",
-        price = 499.99,
-        category = JEWELRY,
-        image = "",
-        description = "An elegant diamond necklace that adds a touch of sophistication."
-    ),
-    Product(
-        id = 3,
-        title = "Wireless Noise-Cancelling Headphones",
-        price = 199.99,
-        category = ELECTRONICS,
-        image = "",
-        description = "High-quality wireless headphones with active noise cancellation."
-    ),
-    Product(
-        id = 4,
-        title = "Noise headphones",
-        price = 199.99,
-        category = ELECTRONICS,
-        image = "",
-        description = "High-quality wireless headphones with active noise cancellation."
-    )
-)

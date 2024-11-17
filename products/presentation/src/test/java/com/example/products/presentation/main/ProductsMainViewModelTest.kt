@@ -7,6 +7,8 @@ import com.example.core.data.di.DispatchersProvider
 import com.example.core.data.di.TestStylishDispatchersProvider
 import com.example.core.presentation.components.ScreenState
 import com.example.products.domain.ProductsRepository
+import com.example.products.domain.model.fakeCategories
+import com.example.products.domain.model.fakeProducts
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk

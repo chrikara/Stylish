@@ -313,7 +313,8 @@ fun BottomBar(
                 .padding(
                     vertical = 36.dp,
                     horizontal = DetailsDefaults.horizontalPadding
-                ),
+                )
+                .testTag(stringResource(R.string.save_button_test_tag)),
             text = stringResource(R.string.save),
             textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
             onClick = onSaveClicked,

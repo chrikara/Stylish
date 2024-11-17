@@ -18,7 +18,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.stylish.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -50,6 +50,8 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            merges += "META-INF/LICENSE.md"
+            merges += "META-INF/LICENSE-notice.md"
         }
     }
 }
@@ -68,11 +70,16 @@ dependencies {
     // hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+    androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
+    androidTestImplementation(libs.hilt.android.testing)
+    kaptAndroidTest(libs.hilt.android.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
@@ -94,7 +101,10 @@ dependencies {
     testImplementation(libs.kotest.assertions.core.jvm)
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.kotest.assertions.core)
     testImplementation(libs.turbine)
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.mockk.agent)
 
     // modules
     implementation(projects.core.presentation)
@@ -109,6 +119,12 @@ dependencies {
     implementation(projects.products.presentation)
     implementation(projects.products.domain)
     implementation(projects.products.data)
+    androidTestImplementation(projects.core.commonTest) {
+        exclude(
+            group = libs.robolectric.get().group,
+            module = libs.robolectric.get().module.name
+        )
+    }
 }
 
 kapt {

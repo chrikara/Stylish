@@ -14,8 +14,8 @@ typealias ProductResponse = com.example.products.data.model.Product
 
 class ProductsRepositoryImpl(
     override val httpClientEngine: HttpClientEngine? = null,
-    private val productResponseMapper: ProductResponseMapper = ProductResponseMapper(),
-    private val categoryResponseMapper: CategoryResponseMapper = CategoryResponseMapper(),
+    private val productResponseMapper: ProductResponseMapper,
+    private val categoryResponseMapper: CategoryResponseMapper,
 ) : FakeStoreApi, ProductsRepository {
     override suspend fun getCategories(): Result<List<Category>> = get<List<String>>(
         endpoint = "/products/categories"

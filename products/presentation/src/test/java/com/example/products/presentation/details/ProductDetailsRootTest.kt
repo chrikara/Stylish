@@ -10,8 +10,8 @@ import com.example.core.commonTest.hasTestTag
 import com.example.core.commonTest.hasText
 import com.example.core.presentation.components.ScreenState
 import com.example.products.domain.model.Product
+import com.example.products.domain.model.fakeProducts
 import com.example.products.presentation.R
-import com.example.products.presentation.main.fakeProducts
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Test
