@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -21,15 +23,47 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.core.presentation.components.uikit.StylishBulletIndicatorRow
+import com.example.products.domain.model.Category
 import com.example.products.presentation.R
 import com.example.products.presentation.main.ProductsMainDefaults
+import com.example.products.presentation.main.textId
+import java.util.Locale
 
 @Composable
-fun BannerSection() {
+fun BannerCarousel(
+    categories: List<Category>,
+    pagerState: PagerState,
+) {
+    HorizontalPager(
+        modifier = Modifier
+            .testTag(stringResource(R.string.infinite_horizontal_pager_test_tag)),
+        state = pagerState,
+        pageSpacing = 16.dp,
+    ) { page ->
+        Banner(
+            itemTitle = stringResource(id = categories[page].textId()).lowercase(Locale.getDefault()),
+        )
+    }
+    Spacer(modifier = Modifier.height(16.dp))
+
+    StylishBulletIndicatorRow(
+        modifier = Modifier.fillMaxWidth(),
+        options = categories,
+        isSelected = { it == categories[pagerState.targetPage] }
+    )
+
+}
+
+@Composable
+fun Banner(
+    itemTitle: String,
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -57,7 +91,7 @@ fun BannerSection() {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = stringResource(R.string.now_in_smartphone),
+                    text = stringResource(R.string.now_in, itemTitle),
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
@@ -77,7 +111,7 @@ fun BannerSection() {
                             ),
                             shape = RoundedCornerShape(6.dp)
                         )
-                        .clickable {  }
+                        .clickable { }
                         .padding(8.dp),
                     text = stringResource(R.string.shop_now),
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold)

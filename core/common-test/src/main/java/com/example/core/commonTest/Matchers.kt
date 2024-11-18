@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.hasText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.core.presentation.components.drawable.DrawableId
 
@@ -19,7 +20,7 @@ fun hasTestTag(
 
 fun hasText(
     @StringRes testTagId: Int,
-): SemanticsMatcher = androidx.compose.ui.test.hasText(
+): SemanticsMatcher = hasText(
     text = context.getString(testTagId)
 )
 

@@ -3,7 +3,7 @@
     <string name="search_any_product">Search any product…</string>
     <string name="all_featured">All Featured</string>
     <string name="_50_40_off">50–40% OFF</string>
-    <string name="now_in_smartphone">Now in smartphone</string>
+    <string name="now_in">Now in %s</string>
     <string name="all_colours">All colours</string>
     <string name="shop_now">Shop Now -></string>
     <string name="product">Product</string>
@@ -25,4 +25,5 @@
     <string name="product_details">Product Details</string>
     <string name="details_edit_section_test_tag">DetailsEditSection</string>
     <string name="details_body_test_tag">DetailsBody</string>
+    <string name="infinite_horizontal_pager_test_tag">InfiniteHorizontalPagerTestTag</string>
 </resources>

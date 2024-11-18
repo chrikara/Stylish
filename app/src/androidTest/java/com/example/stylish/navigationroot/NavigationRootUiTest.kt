@@ -56,6 +56,7 @@ class NavigationRootUiTest {
         }
     }
 
+
     @Test
     fun end_to_end_test() {
         // splash

@@ -37,7 +37,7 @@ class ProductsViewModel @Inject constructor(
     private var _categorySelected = MutableStateFlow(null as Category?)
     val categorySelected = _categorySelected.asStateFlow()
 
-    var _categories = MutableStateFlow(emptyList<Category>())
+    private var _categories = MutableStateFlow(emptyList<Category>())
     val categories = _categories.asStateFlow()
 
     init {

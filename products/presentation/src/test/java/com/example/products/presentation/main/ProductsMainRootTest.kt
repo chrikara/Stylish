@@ -1,5 +1,6 @@
 package com.example.products.presentation.main
 
+import android.app.Application
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
@@ -21,6 +22,9 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeLeft
+import androidx.test.core.app.ApplicationProvider
 import com.example.core.commonTest.AndroidTest
 import com.example.core.commonTest.hasTestTag
 import com.example.core.commonTest.hasText
@@ -36,6 +40,8 @@ import org.junit.Test
 import org.robolectric.annotation.Config
 
 class ProductsMainRootTest : AndroidTest() {
+    private val context = ApplicationProvider.getApplicationContext<Application>()
+
     @Test
     fun `when state is loading, assert only loading screen is present`() {
         // given
@@ -230,6 +236,36 @@ class ProductsMainRootTest : AndroidTest() {
         verify {
             onProductClicked(productClicked)
         }
+    }
+
+    @Test
+    fun `assert banner page is correctly moved`() {
+        // given
+        val firstCategoryText = context.getString(
+            R.string.now_in,
+            context.getString(fakeCategories[0].textId()).lowercase()
+        )
+
+        val secondCategoryTest = context.getString(
+            R.string.now_in,
+            context.getString(fakeCategories[1].textId()).lowercase()
+        )
+
+        // when
+        rule.setContent { ProductsMainRootUnderTest(categories = fakeCategories) }
+        rule.onNode(
+            hasText(firstCategoryText)
+        ).assertIsDisplayed()
+
+        rule.onNode(hasTestTag(R.string.infinite_horizontal_pager_test_tag))
+            .performTouchInput {
+                swipeLeft()
+            }
+
+        // then
+        rule.onNode(
+            hasText(secondCategoryTest)
+        ).assertIsDisplayed()
     }
 
     @Composable

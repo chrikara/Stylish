@@ -20,12 +20,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,6 +55,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.core.presentation.components.ScreenState
+import com.example.core.presentation.components.format.format
 import com.example.core.presentation.components.modifier.applyIf
 import com.example.core.presentation.components.modifier.clickableNoMergeNoRipple
 import com.example.core.presentation.components.theme.StylishTheme
@@ -68,7 +71,7 @@ import com.example.products.domain.model.uniqueKey
 import com.example.products.presentation.R
 import com.example.products.presentation.components.ErrorScreen
 import com.example.products.presentation.components.LoadingScreen
-import com.example.products.presentation.main.components.BannerSection
+import com.example.products.presentation.main.components.BannerCarousel
 
 
 @Composable
@@ -80,7 +83,7 @@ fun ProductsMainRoot(
     val filteredProducts by viewModel.filteredProducts.collectAsStateWithLifecycle()
     val categorySelected by viewModel.categorySelected.collectAsStateWithLifecycle()
     val searchText by viewModel.searchText.collectAsStateWithLifecycle()
-    val categories by viewModel.categories.collectAsStateWithLifecycle()
+    val categories by viewModel.categories.collectAsState()
 
     ProductsMainRoot(
         searchText = searchText,
@@ -135,13 +138,15 @@ private fun ProductsMainContent(
     searchText: String = "",
     onSearchTextChanged: (String) -> Unit,
     onClearClicked: () -> Unit = {},
-    categories: List<Category> = listOf(Category.ELECTRONICS),
+    categories: List<Category> = listOf(ELECTRONICS),
     onCategoryClicked: (Category) -> Unit,
     categorySelected: Category? = null,
     onProductClicked: (Product) -> Unit,
     products: List<Product> = listOf()
 ) {
     val focusManager = LocalFocusManager.current
+    val pagerState = rememberPagerState(pageCount = { categories.size })
+
     Column(
         modifier = Modifier
             .clickableNoMergeNoRipple {
@@ -197,12 +202,10 @@ private fun ProductsMainContent(
             Spacer(modifier = Modifier.height(25.dp))
         }
 
-        /*
-        Most of the Banner's resources should probably come from backend, meaning they could be
-        hoisted to the top composable for the viewModel to manage them. But since this is a demo and
-        we don't have an actual API for this, we're adding them as string resources.
-         */
-        BannerSection()
+        BannerCarousel(
+            categories = categories,
+            pagerState = pagerState,
+        )
 
         Spacer(modifier = Modifier.height(50.dp))
 
@@ -348,7 +351,7 @@ private fun ProductItem(
 
             product.price?.let {
                 Text(
-                    text = it.toString() + "€",
+                    text = it.format(),
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
                     color = MaterialTheme.colorScheme.onBackground
                 )

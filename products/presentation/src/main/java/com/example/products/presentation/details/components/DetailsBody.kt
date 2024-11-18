@@ -21,6 +21,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.example.core.presentation.components.format.format
 import com.example.products.domain.model.Product
 import com.example.products.presentation.R
 import com.example.products.presentation.details.DetailsDefaults
@@ -58,7 +59,7 @@ internal fun DetailsBody(
 
         product?.price?.let { price ->
             Text(
-                text = price.toString() + "€",
+                text = price.format(),
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium)
             )
             Spacer(modifier = Modifier.height(16.dp))
